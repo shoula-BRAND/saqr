@@ -89,6 +89,7 @@
             height: 38px;
             cursor: pointer;
             flex-shrink: 0;
+            object-fit: contain;
         }
 
         nav {
@@ -307,6 +308,7 @@
             width: 100%;
             height: auto;
             margin-bottom: 10px;
+            object-fit: contain;
         }
 
         /* Main Container */
@@ -353,11 +355,13 @@
             justify-content: center;
             align-items: center;
             position: relative;
+            overflow: hidden;
         }
 
         .product-img-wrapper img.brand-overlay {
-            width: 100px;
-            height: auto;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
             position: absolute;
             z-index: 2;
         }
@@ -424,7 +428,7 @@
             border: 1px solid var(--border-color);
         }
 
-        .main-preview-img img { max-width: 110px; height: auto; }
+        .main-preview-img img { width: 100%; height: 100%; object-fit: cover; }
 
         .thumbnail-container {
             display: flex;
@@ -446,7 +450,7 @@
             transition: border-color 0.2s;
         }
 
-        .thumb-btn img { max-width: 25px; height: auto; }
+        .thumb-btn img { width: 100%; height: 100%; object-fit: cover; }
         .thumb-btn.active, .thumb-btn:hover { border-color: #000; }
 
         .size-selector {
@@ -584,7 +588,7 @@
         .order-code {
             font-size: 1.1rem; font-weight: bold; background: #eee; display: inline-block; padding: 8px 16px; border-radius: 4px; margin: 15px 0;
         }
-        .thank-you-logo { width: 150px; height: auto; margin-top: 20px; }
+        .thank-you-logo { width: 150px; height: auto; margin-top: 20px; object-fit: contain; }
 
         /* Footer Styles */
         footer {
@@ -664,13 +668,13 @@
         <svg class="falcon-anim" viewBox="0 0 100 100" fill="#000">
             <path d="M10,50 Q30,20 60,30 Q80,10 95,25 Q70,45 60,60 Q40,80 10,50 Z" />
         </svg>
-        <img src="C:/Users/CompuLap/Downloads/3-removebg-preview.png" alt="صقر Logo" class="splash-logo">
+        <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=400" alt="صقر Logo" class="splash-logo">
     </div>
 
     <div class="main-wrapper">
         <!-- Navigation Header -->
         <header>
-            <img src="C:/Users/CompuLap/Downloads/3-removebg-preview.png" alt="صقر" class="header-logo" onclick="showPage('shop')">
+            <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=400" alt="صقر" class="header-logo" onclick="showPage('shop')">
             
             <nav>
                 <a onclick="filterCategory('pants')" id="nav-pants" data-i18n="nav_pants">بنطلونات</a>
@@ -682,7 +686,7 @@
             </nav>
 
             <div class="header-actions">
-                <button class="size-guide-nav-btn" onclick="openSizeGuideModal()" data-i18n="btn_size_guide">جدول المقاسات </button>
+                <button class="size-guide-nav-btn" onclick="openSizeGuideModal()" data-i18n="btn_size_guide">جدول المقاسات 📏</button>
                 <button class="lang-btn" id="langBtn" onclick="toggleLanguage()">EN</button>
                 <div class="search-box">
                     <input type="text" id="searchInput" placeholder="بحث..." data-i18n-ph="search_ph" onkeyup="handleSearch()">
@@ -715,7 +719,7 @@
         <!-- Page 1: Main Shop Page -->
         <div id="shop-page" class="page-view active">
             <div class="hero">
-                <img src="C:/Users/CompuLap/Downloads/3-removebg-preview.png" alt="صقر Brand">
+                <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=400" alt="صقر Brand">
             </div>
 
             <div class="container">
@@ -811,7 +815,7 @@
                     <p data-i18n="thank_sub">تم استلام طلبك بنجاح وسوف نتواصل معك لترتيب التوصيل.</p>
                     <div class="order-code" id="orderCodeDisplay">Code: SQ0000</div>
                     <br>
-                    <img src="C:/Users/CompuLap/Downloads/3-removebg-preview.png" alt="صقر Official Seal" class="thank-you-logo">
+                    <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=400" alt="صقر Official Seal" class="thank-you-logo">
                     <br><br>
                     <button class="btn-primary" style="max-width: 200px;" onclick="resetShop()" data-i18n="btn_back">العودة للمتجر</button>
                 </div>
@@ -829,7 +833,7 @@
             <div class="footer-col">
                 <h4 data-i18n="footer_support_title">خدمة العملاء</h4>
                 <p data-i18n="footer_support_text">لأي استفسار أو مساعدة، تواصل معنا مباشرة عبر واتساب:</p>
-                <a href="https://wa.me/201062910161" target="_blank" style="font-weight: bold; font-size: 1.05rem; color: #FFFFFF;"> 01062910161</a>
+                <a href="https://wa.me/201062910161" target="_blank" style="font-weight: bold; font-size: 1.05rem; color: #FFFFFF;">01062910161</a>
             </div>
             <div class="footer-col">
                 <h4 data-i18n="footer_social_title">تابعنا على منصات التواصل</h4>
@@ -851,7 +855,7 @@
             
             <div class="product-gallery">
                 <div class="main-preview-img">
-                    <img id="mainModalImg" src="C:/Users/CompuLap/Downloads/3-removebg-preview.png" alt="Product View">
+                    <img id="mainModalImg" src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=400" alt="Product View">
                 </div>
                 <div class="thumbnail-container" id="thumbnailContainer"></div>
             </div>
@@ -945,7 +949,7 @@
                 no_results: "لا توجد نتائج مطابقة",
                 empty_cart: "السلة فارغة حالياً",
                 footer_policy_title: "سياسة الاستبدال والاسترجاع",
-                footer_policy_text: "يحق للعميل استبدال أو استرجاع المنتجات خلال 14 يوماً من استلاستلام الطلب، بشرط أن يكون المنتج بحالته الأصلية وفي الغلاف الأصلي ولم يتم استخدامه.",
+                footer_policy_text: "يحق للعميل استبدال أو استرجاع المنتجات خلال 14 يوماً من استلام الطلب، بشرط أن يكون المنتج بحالته الأصلية وفي الغلاف الأصلي ولم يتم استخدامه.",
                 footer_support_title: "خدمة العملاء",
                 footer_support_text: "لأي استفسار أو مساعدة، تواصل معنا مباشرة عبر واتساب:",
                 footer_social_title: "تابعنا على منصات التواصل",
@@ -1051,27 +1055,57 @@
         const products = [
             { 
                 id: 1, title_ar: 'بنطلون كارجو أسود', title_en: 'Black Cargo Pant', category: 'pants', price: 850, 
-                images: ["C:/Users/CompuLap/Downloads/3-removebg-preview.png","C:/Users/CompuLap/Downloads/3-removebg-preview.png","C:/Users/CompuLap/Downloads/3-removebg-preview.png","C:/Users/CompuLap/Downloads/3-removebg-preview.png"] 
+                images: [
+                    "https://images.unsplash.com/photo-1517445312882-bc9910d016b7?w=500",
+                    "https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=500",
+                    "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=500",
+                    "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=500"
+                ] 
             },
             { 
                 id: 2, title_ar: 'هودي أوفرسايز أسود', title_en: 'Oversized Black Hoodie', category: 'hoodies', price: 1200, 
-                images: ["C:/Users/CompuLap/Downloads/3-removebg-preview.png","C:/Users/CompuLap/Downloads/3-removebg-preview.png","C:/Users/CompuLap/Downloads/3-removebg-preview.png","C:/Users/CompuLap/Downloads/3-removebg-preview.png"] 
+                images: [
+                    "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=500",
+                    "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500",
+                    "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=500",
+                    "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=500"
+                ] 
             },
             { 
                 id: 3, title_ar: 'كرونيك أسود كلاسيك', title_en: 'Classic Black Crewneck', category: 'crewnecks', price: 950, 
-                images: ["C:/Users/CompuLap/Downloads/3-removebg-preview.png","C:/Users/CompuLap/Downloads/3-removebg-preview.png","C:/Users/CompuLap/Downloads/3-removebg-preview.png","C:/Users/CompuLap/Downloads/3-removebg-preview.png"] 
+                images: [
+                    "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=500",
+                    "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=500",
+                    "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=500",
+                    "https://images.unsplash.com/photo-1562157873-818bc0726f68?w=500"
+                ] 
             },
             { 
                 id: 4, title_ar: 'تيشيرت كم طويل أسود', title_en: 'Black Long Sleeves Tee', category: 'long_sleeves', price: 750, 
-                images: ["C:/Users/CompuLap/Downloads/3-removebg-preview.png","C:/Users/CompuLap/Downloads/3-removebg-preview.png","C:/Users/CompuLap/Downloads/3-removebg-preview.png","C:/Users/CompuLap/Downloads/3-removebg-preview.png"] 
+                images: [
+                    "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=500",
+                    "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=500",
+                    "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=500",
+                    "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=500"
+                ] 
             },
             { 
                 id: 5, title_ar: 'هودي أطفال أبيض', title_en: 'White Kids Hoodie', category: 'kids_hoodie', price: 650, 
-                images: ["C:/Users/CompuLap/Downloads/3-removebg-preview.png","C:/Users/CompuLap/Downloads/3-removebg-preview.png","C:/Users/CompuLap/Downloads/3-removebg-preview.png","C:/Users/CompuLap/Downloads/3-removebg-preview.png"] 
+                images: [
+                    "https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=500",
+                    "https://images.unsplash.com/photo-1503944583220-7eeec390d81b?w=500",
+                    "https://images.unsplash.com/photo-1471286174890-9c112ffca5b4?w=500",
+                    "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=500"
+                ] 
             },
             { 
                 id: 6, title_ar: 'هودي أوفرسايز طويل أسود', title_en: 'Long Oversize Black Hoodie', category: 'long_oversize', price: 1350, 
-                images: ["C:/Users/CompuLap/Downloads/3-removebg-preview.png","C:/Users/CompuLap/Downloads/3-removebg-preview.png","C:/Users/CompuLap/Downloads/3-removebg-preview.png","C:/Users/CompuLap/Downloads/3-removebg-preview.png"] 
+                images: [
+                    "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500",
+                    "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=500",
+                    "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=500",
+                    "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=500"
+                ] 
             }
         ];
 
