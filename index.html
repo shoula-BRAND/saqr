@@ -564,8 +564,8 @@
 
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; font-weight: 700; margin-bottom: 6px; font-size: 0.95rem; }
-        .form-group input, .form-group select {
-            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 0.95rem;
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 0.95rem; resize: vertical;
         }
 
         .error-msg { color: red; font-size: 0.8rem; margin-top: 5px; display: none; }
@@ -754,7 +754,7 @@
 
                     <!-- Formspree Form -->
                     <form id="checkoutForm" action="https://formspree.io/f/xyekejpa" method="POST" onsubmit="processOrder(event)">
-                        <!-- Hidden inputs to send full order details to your email -->
+                        <!-- Hidden inputs for complete order details -->
                         <input type="hidden" id="fullOrderDetails" name="تفاصيل_الطلب_الكاملة">
                         <input type="hidden" id="orderTotalPrice" name="الاجمالي_الكلي">
                         <input type="hidden" id="orderCodeInput" name="كود_الطلب">
@@ -792,6 +792,12 @@
                             </select>
                         </div>
 
+                        <!-- Added Address Field -->
+                        <div class="form-group">
+                            <label>العنوان بالتفصيل (الشارع، رقم العمارة، الشقة)</label>
+                            <textarea id="custAddress" name="العنوان_بالتفصيل" rows="2" required placeholder="اكتب عنوانك بالتفصيل هنا..."></textarea>
+                        </div>
+
                         <div class="form-group">
                             <label data-i18n="label_payment">طريقة الدفع</label>
                             <div class="payment-options">
@@ -816,7 +822,7 @@
         <div id="thankyou-page" class="page-view">
             <div class="container">
                 <div class="thank-you-card">
-                    <h2 id="thankYouMessage">شكراً لك!</h2>
+                    <h2 id="thankYouMessage">Thank You!</h2>
                     <p data-i18n="thank_sub">تم استلام طلبك بنجاح وسوف نتواصل معك لترتيب التوصيل.</p>
                     <div class="order-code" id="orderCodeDisplay">Code: SQ0000</div>
                     <br>
@@ -943,7 +949,6 @@
                 btn_confirm: "تأكيد الطلب",
                 btn_sending: "جاري الإرسال...",
                 btn_checkout: "الانتقال للدفع",
-                thank_title: "شكراً لك، ",
                 thank_sub: "تم استلام طلبك بنجاح وسوف نتواصل معك لترتيب التوصيل.",
                 btn_back: "العودة للمتجر",
                 choose_size: "اختر المقاس:",
@@ -992,7 +997,6 @@
                 btn_confirm: "Confirm Order",
                 btn_sending: "Sending...",
                 btn_checkout: "Proceed to Checkout",
-                thank_title: "Thank You, ",
                 thank_sub: "Your order has been received! We will contact you soon for delivery.",
                 btn_back: "Back to Shop",
                 choose_size: "Choose Size:",
@@ -1432,7 +1436,7 @@
                 return;
             }
 
-            // تجميع كافة تفاصيل الأوردر بشكل مرتب لإرسالها بالبريد
+            // تجميع تفاصيل المنتجات لتصلك في الإيميل
             let orderDetailsString = cart.map(item => `• المنتج: ${item.title_ar} | المقاس: ${item.size} | الكمية: ${item.qty} | السعر: ${item.price * item.qty} ج.م`).join('\n');
             
             const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
@@ -1442,22 +1446,22 @@
             
             const randomCode = 'SQ' + Math.floor(1000 + Math.random() * 9000);
 
-            orderDetailsString += `\n-------------------\nإجمالي المنتجات: ${subtotal} ج.م\nتكلفة الشحن: ${shippingCost} ج.م\nالإجمالي الكلي: ${grandTotal} ج.م`;
+            orderDetailsString += `\n-------------------\nمجموع المنتجات: ${subtotal} ج.م\nمصاريف الشحن: ${shippingCost} ج.م\nالإجمالي الكلي: ${grandTotal} ج.م`;
 
-            // حقن القيم في الحقول المخفية داخل الفورم
+            // حقن القيم في الحقول المخفية
             document.getElementById('fullOrderDetails').value = orderDetailsString;
             document.getElementById('orderTotalPrice').value = grandTotal + ' EGP';
             document.getElementById('orderCodeInput').value = randomCode;
 
-            // ضبط زر الإرسال وتوجيه العميل لصفحة الشكر
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.disabled = true;
             submitBtn.innerText = translations[currentLang].btn_sending;
 
             setTimeout(() => {
                 const name = document.getElementById('custName').value;
-                document.getElementById('thankYouMessage').innerText = translations[currentLang].thank_title + name + '!';
-                document.getElementById('orderCodeDisplay').innerText = 'Code: ' + randomCode;
+                // عرض Thank You + الاسم + الكود تماماً كما طلبت
+                document.getElementById('thankYouMessage').innerText = `Thank You, ${name}!`;
+                document.getElementById('orderCodeDisplay').innerText = `Code: ${randomCode}`;
 
                 cart = [];
                 saveCartToStorage();
