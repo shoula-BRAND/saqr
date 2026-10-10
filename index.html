@@ -752,26 +752,27 @@
                         </div>
                     </div>
 
-                    <!-- Formspree Integration Form -->
+                    <!-- Formspree Form -->
                     <form id="checkoutForm" action="https://formspree.io/f/xyekejpa" method="POST" onsubmit="processOrder(event)">
-                        <!-- Hidden input to pass cart details via Formspree -->
-                        <input type="hidden" id="cartDetailsInput" name="Cart Details">
-                        <input type="hidden" id="orderCodeInput" name="Order Code">
+                        <!-- Hidden inputs to send full order details to your email -->
+                        <input type="hidden" id="fullOrderDetails" name="تفاصيل_الطلب_الكاملة">
+                        <input type="hidden" id="orderTotalPrice" name="الاجمالي_الكلي">
+                        <input type="hidden" id="orderCodeInput" name="كود_الطلب">
 
                         <div class="form-group">
                             <label data-i18n="label_name">الاسم بالكامل</label>
-                            <input type="text" id="custName" name="Customer Name" required placeholder="أدخل اسمك" data-i18n-ph="ph_name">
+                            <input type="text" id="custName" name="اسم_العميل" required placeholder="أدخل اسمك" data-i18n-ph="ph_name">
                         </div>
 
                         <div class="form-group">
                             <label data-i18n="label_phone">رقم الهاتف</label>
-                            <input type="tel" id="custPhone" name="Customer Phone" required placeholder="01xxxxxxxxx" oninput="validatePhone()">
+                            <input type="tel" id="custPhone" name="رقم_الهاتف" required placeholder="01xxxxxxxxx" oninput="validatePhone()">
                             <div class="error-msg" id="phoneError" data-i18n="err_phone">يرجى إدخال رقم هاتف مصري صحيح (11 رقم)</div>
                         </div>
 
                         <div class="form-group">
                             <label data-i18n="label_gov">المحافظة</label>
-                            <select id="custGov" name="Governorate" required onchange="updateCheckoutSummary()">
+                            <select id="custGov" name="المحافظة" required onchange="updateCheckoutSummary()">
                                 <option value="دمياط" data-cost="50">دمياط (الفرع الرئيسي) - 50 ج.م</option>
                                 <option value="القاهرة" data-cost="50">القاهرة - 50 ج.م</option>
                                 <option value="الجيزة" data-cost="50">الجيزة - 50 ج.م</option>
@@ -795,11 +796,11 @@
                             <label data-i18n="label_payment">طريقة الدفع</label>
                             <div class="payment-options">
                                 <label class="payment-option">
-                                    <input type="radio" name="Payment Method" value="Cash on Delivery" checked>
+                                    <input type="radio" name="طريقة_الدفع" value="الدفع عند الاستلام (Cash on Delivery)" checked>
                                     <span data-i18n="pay_cod">الدفع عند الاستلام (Cash on Delivery)</span>
                                 </label>
                                 <label class="payment-option">
-                                    <input type="radio" name="Payment Method" value="Visa/Mastercard">
+                                    <input type="radio" name="طريقة_الدفع" value="بطاقة ائتمان (Visa / Mastercard)">
                                     <span data-i18n="pay_card">بطاقة ائتمان (Visa / Mastercard)</span>
                                 </label>
                             </div>
@@ -1431,20 +1432,42 @@
                 return;
             }
 
-            // Prepare cart details into hidden input for Formspree
-            let cartSummaryText = cart.map(item => `${item.title_ar} (${item.size}) - Qty: ${item.qty} - Price: ${item.price * item.qty} EGP`).join(' | ');
+            // تجميع كافة تفاصيل الأوردر بشكل مرتب لإرسالها بالبريد
+            let orderDetailsString = cart.map(item => `• المنتج: ${item.title_ar} | المقاس: ${item.size} | الكمية: ${item.qty} | السعر: ${item.price * item.qty} ج.م`).join('\n');
+            
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const govSelect = document.getElementById('custGov');
+            const shippingCost = parseInt(govSelect.options[govSelect.selectedIndex].getAttribute('data-cost'));
+            const grandTotal = subtotal + shippingCost;
+            
             const randomCode = 'SQ' + Math.floor(1000 + Math.random() * 9000);
 
-            document.getElementById('cartDetailsInput').value = cartSummaryText;
+            orderDetailsString += `\n-------------------\nإجمالي المنتجات: ${subtotal} ج.م\nتكلفة الشحن: ${shippingCost} ج.م\nالإجمالي الكلي: ${grandTotal} ج.م`;
+
+            // حقن القيم في الحقول المخفية داخل الفورم
+            document.getElementById('fullOrderDetails').value = orderDetailsString;
+            document.getElementById('orderTotalPrice').value = grandTotal + ' EGP';
             document.getElementById('orderCodeInput').value = randomCode;
 
-            // Optional: Handle UI transition (Formspree will handle the submission natively)
+            // ضبط زر الإرسال وتوجيه العميل لصفحة الشكر
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.disabled = true;
             submitBtn.innerText = translations[currentLang].btn_sending;
 
-            // Store info for thank you page display if needed, then let form submit
-            localStorage.setItem('last_order_code', randomCode);
+            setTimeout(() => {
+                const name = document.getElementById('custName').value;
+                document.getElementById('thankYouMessage').innerText = translations[currentLang].thank_title + name + '!';
+                document.getElementById('orderCodeDisplay').innerText = 'Code: ' + randomCode;
+
+                cart = [];
+                saveCartToStorage();
+
+                submitBtn.disabled = false;
+                submitBtn.innerText = translations[currentLang].btn_confirm;
+                document.getElementById('checkoutForm').reset();
+
+                showPage('thankyou');
+            }, 1000);
         }
 
         function resetShop() {
