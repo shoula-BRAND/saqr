@@ -685,7 +685,7 @@
             </nav>
 
             <div class="header-actions">
-                <button class="size-guide-nav-btn" onclick="openSizeGuideModal()" data-i18n="btn_size_guide">جدول المقاسات </button>
+                <button class="size-guide-nav-btn" onclick="openSizeGuideModal()" data-i18n="btn_size_guide">جدول المقاسات 📏</button>
                 <button class="lang-btn" id="langBtn" onclick="toggleLanguage()">EN</button>
                 <div class="search-box">
                     <input type="text" id="searchInput" placeholder="بحث..." data-i18n-ph="search_ph" onkeyup="handleSearch()">
@@ -752,7 +752,12 @@
                         </div>
                     </div>
 
-                    <form id="checkoutForm" onsubmit="processOrder(event)">
+                    <!-- Formspree Integration Form -->
+                    <form id="checkoutForm" action="https://formspree.io/f/xyekejpa" method="POST" onsubmit="processOrder(event)">
+                        <!-- Hidden input to pass cart details via Formspree -->
+                        <input type="hidden" id="cartDetailsInput" name="Cart Details">
+                        <input type="hidden" id="orderCodeInput" name="Order Code">
+
                         <div class="form-group">
                             <label data-i18n="label_name">الاسم بالكامل</label>
                             <input type="text" id="custName" name="Customer Name" required placeholder="أدخل اسمك" data-i18n-ph="ph_name">
@@ -1421,29 +1426,25 @@
         }
 
         function processOrder(e) {
-            e.preventDefault();
-            if (!validatePhone()) return;
+            if (!validatePhone()) {
+                e.preventDefault();
+                return;
+            }
 
+            // Prepare cart details into hidden input for Formspree
+            let cartSummaryText = cart.map(item => `${item.title_ar} (${item.size}) - Qty: ${item.qty} - Price: ${item.price * item.qty} EGP`).join(' | ');
+            const randomCode = 'SQ' + Math.floor(1000 + Math.random() * 9000);
+
+            document.getElementById('cartDetailsInput').value = cartSummaryText;
+            document.getElementById('orderCodeInput').value = randomCode;
+
+            // Optional: Handle UI transition (Formspree will handle the submission natively)
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.disabled = true;
             submitBtn.innerText = translations[currentLang].btn_sending;
 
-            setTimeout(() => {
-                const name = document.getElementById('custName').value;
-                const randomCode = 'SQ' + Math.floor(1000 + Math.random() * 9000);
-
-                document.getElementById('thankYouMessage').innerText = translations[currentLang].thank_title + name + '!';
-                document.getElementById('orderCodeDisplay').innerText = 'Code: ' + randomCode;
-
-                cart = [];
-                saveCartToStorage();
-
-                submitBtn.disabled = false;
-                submitBtn.innerText = translations[currentLang].btn_confirm;
-                document.getElementById('checkoutForm').reset();
-
-                showPage('thankyou');
-            }, 1200);
+            // Store info for thank you page display if needed, then let form submit
+            localStorage.setItem('last_order_code', randomCode);
         }
 
         function resetShop() {
